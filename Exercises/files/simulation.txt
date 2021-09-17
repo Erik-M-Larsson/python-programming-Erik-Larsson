@@ -1,0 +1,51 @@
+Typ av tärning: T8
+
+Antal kast: 10
+Ettor 2, sannolikhet: 0.2
+Tvåor 0, sannolikhet: 0.0
+Treor 0, sannolikhet: 0.0
+Fyror 2, sannolikhet: 0.2
+Femor 1, sannolikhet: 0.1
+Sexor 1, sannolikhet: 0.1
+Sjuor 2, sannolikhet: 0.2
+Åttor 2, sannolikhet: 0.2
+
+Antal kast: 100
+Ettor 10, sannolikhet: 0.1
+Tvåor 14, sannolikhet: 0.14
+Treor 10, sannolikhet: 0.1
+Fyror 17, sannolikhet: 0.17
+Femor 13, sannolikhet: 0.13
+Sexor 10, sannolikhet: 0.1
+Sjuor 13, sannolikhet: 0.13
+Åttor 13, sannolikhet: 0.13
+
+Antal kast: 1000
+Ettor 117, sannolikhet: 0.117
+Tvåor 110, sannolikhet: 0.11
+Treor 129, sannolikhet: 0.129
+Fyror 131, sannolikhet: 0.131
+Femor 126, sannolikhet: 0.126
+Sexor 132, sannolikhet: 0.132
+Sjuor 124, sannolikhet: 0.124
+Åttor 131, sannolikhet: 0.131
+
+Antal kast: 10000
+Ettor 1283, sannolikhet: 0.1283
+Tvåor 1280, sannolikhet: 0.128
+Treor 1176, sannolikhet: 0.1176
+Fyror 1205, sannolikhet: 0.1205
+Femor 1273, sannolikhet: 0.1273
+Sexor 1246, sannolikhet: 0.1246
+Sjuor 1278, sannolikhet: 0.1278
+Åttor 1259, sannolikhet: 0.1259
+
+Antal kast: 100000
+Ettor 12408, sannolikhet: 0.12408
+Tvåor 12503, sannolikhet: 0.12503
+Treor 12467, sannolikhet: 0.12467
+Fyror 12426, sannolikhet: 0.12426
+Femor 12551, sannolikhet: 0.12551
+Sexor 12607, sannolikhet: 0.12607
+Sjuor 12654, sannolikhet: 0.12654
+Åttor 12384, sannolikhet: 0.12384
