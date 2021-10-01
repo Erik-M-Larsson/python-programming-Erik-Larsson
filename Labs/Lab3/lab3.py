@@ -40,21 +40,23 @@ class Geometrisk_form:
         """Flööar på mittpunkten till ny angiven punkt.
         Med relativ = True flyttas mittpunkten x enheter i x-led och y enheter i y-led"""
         if relativ:
-            self.test_reelt(x)
-            self.test_reelt(y)
-            self.flööö(self._x + x, self._y + y, relativ = False)
+            #self.test_reelt(x)
+            #self.test_reelt(y)
+            self.x += x 
+            self.y += y
         else:
             self.x = x
             self.y = y
-            # TODO rita ut figuren igen på nya platsen. När den metoden finns.
+        
+        self.rita_ut()
 
     def rita_ut(self) -> None:
         fig, ax = plt.figure(),plt.axes() 
 
-        ax.plot(self.x, self.y, ["b+"])
+        ax.plot(self.x, self.y, "ro")
         # TODO plot randen på formen
 
-        ax.set(titlle="Nått smart", xlabel="x", ylabel="y")
+        ax.set(title="Nått smart", xlabel="x", ylabel="y")
         plt.show()
 
 
