@@ -22,7 +22,7 @@ class Geometrisk_form:
 
     @x.setter
     def x(self,val):
-        self.test_reelt(val)
+        self._test_reelt(val)
         self._x = val
 
 
@@ -32,11 +32,11 @@ class Geometrisk_form:
         
     @y.setter
     def y(self,val):
-        self.test_reelt(val)
+        self._test_reelt(val)
         self._y = val
 
     @staticmethod
-    def test_reelt(val: any) -> None:
+    def _test_reelt(val: any) -> None:
         if not isinstance(val, (float, int)):
             raise(TypeError("Angivet värde är inte ett reellt tal")) # TODO hitta på bättre meddelande
 
@@ -44,8 +44,8 @@ class Geometrisk_form:
         """Flööar på mittpunkten till ny angiven punkt.
         Med relativ = True flyttas mittpunkten x enheter i x-led och y enheter i y-led"""
         if relativ:
-            #self.test_reelt(x)
-            #self.test_reelt(y)
+            #self._test_reelt(x)
+            #self._test_reelt(y)
             self.x += x 
             self.y += y
         else:
@@ -64,11 +64,69 @@ class Geometrisk_form:
         plt.show()
 
     def __repr__(self) -> str: # TODO skriv nått i denna
-        pass
+        return "hej"
 
 
 class Rektangel(Geometrisk_form):
-    pass
+    """Klass för rektanglar"""
+
+    def __init__(self, x: float, y: float, a: float, b: float) -> None:
+        self.a = a
+        self.b = b
+        super().__init__(x, y)
+
+    @property
+    def a(self) -> float:
+        return self._a
+        
+    @a.setter
+    def a(self, val: float) -> None:
+        self._test_reelt(val)
+        self._a = val
+
+    @property
+    def b(self) -> float:
+        return self._b
+
+    @b.setter
+    def b(self, val: float) -> None:
+        self._test_reelt(val) 
+        self._b = val
+
+    def omkrets(self) -> float:
+        return (self.a + self.b) * 2
+
+    def area(self) -> float:
+        return (self.a * self.b)
+
+    def inne_i(self, x: float, y: float) -> bool:
+        self._test_reelt(x)
+        self._test_reelt(y)
+        
+        return abs(self.x - x) <= self.a/2 and abs(self.y - y) <= self.b/2
+
+    def __eq__(self, other: "Rektangel") -> bool: 
+        if not isinstance(other, Rektangel):
+            raise TypeError("Måste vara av klassen Rektangel") 
+        return (self.a == other.a and self.b == other.b) or (self.a == other.b and self.b == other.a)
+
+    def rita_ut(self) -> None:
+        xa = np.linspace(-self.a/2, self.a/2) 
+        ya = np.linspace(-self.b/2, -self.b/2)
+        xb = np.linspace(self.a/2, self.a/2)
+        yb = np.linspace(-self.b/2, self.b/2)
+        xc = np.linspace(self.a/2, -self.a/2)
+        yc = np.linspace(self.b/2, self.b/2)
+        xd = np.linspace(-self.a/2, -self.a/2)
+        yd = np.linspace(self.b/2, -self.b/2)
+        self._xx = np.concatenate((xa, xb, xc, xd))    # TODO Hitta bättre variabelnamn än  xx
+        self._yy = np.concatenate((ya, yb, yc, yd))
+      
+        return super().rita_ut()
+
+    def __repr__(self) -> str: 
+        return f"Rektanngel( x = {self.x}, y = {self.y}, a = {self.a}, b = {self.b})"
+
 
 class Cirkel(Geometrisk_form):
     "Klass för cirklar"
@@ -83,7 +141,7 @@ class Cirkel(Geometrisk_form):
 
     @r.setter
     def r(self, val: float) -> None:
-        self.test_reelt(val)
+        self._test_reelt(val)
         self._r = val
 
     def omkrets(self) -> float:
@@ -98,6 +156,8 @@ class Cirkel(Geometrisk_form):
         return avstånd_mitt <= self.r
 
     def __eq__(self, other: "Cirkel") -> bool:
+        if not isinstance(other, Cirkel):
+            raise TypeError("Måste vara av klassen Cirkel") 
         return self.r == other.r
 
     def rita_ut(self) -> None:
