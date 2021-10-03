@@ -1,11 +1,13 @@
 from matplotlib import axes
 import matplotlib.pyplot as plt
 import numpy as np
-from math import tau
+from math import tau, sqrt
 
 
-class XYplan:
+class XYplan: # TODO snyggt plan för flera geometriska filurer
     pass
+
+
 
 class Geometrisk_form:
     """Klass för geometriska former"""
@@ -40,6 +42,18 @@ class Geometrisk_form:
         if not isinstance(val, (float, int)):
             raise(TypeError("Angivet värde är inte ett reellt tal")) # TODO hitta på bättre meddelande
 
+    @staticmethod
+    def _apa(max_distans:  float, x1: float=0, y1:  float=0, z1: float=0, x2: float=0, y2: float=0, z2: float=0 ) -> bool: # TODO namnge metoden
+        """Kontrollerar euklidiskt avstånd mellan två punkter och jämför om det är <= max_distans"""
+        
+        # Kontroll datatyp 
+        tester = (max_distans, x1, y1, z1, x2, y2, z2)
+        for t in tester:
+            Geometrisk_form._test_reelt(t)
+
+        # Beräkna avstånd och jämför med angivet maxvärde
+        return round(sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2), 10) <= max_distans # Risk för avrundningstal med flyttal vid randen
+
     def flööö(self,x, y, relativ = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
         """Flööar på mittpunkten till ny angiven punkt.
         Med relativ = True flyttas mittpunkten x enheter i x-led och y enheter i y-led"""
@@ -65,6 +79,8 @@ class Geometrisk_form:
 
     def __repr__(self) -> str: # TODO skriv nått i denna
         return "hej"
+
+
 
 
 class Rektangel(Geometrisk_form):
@@ -100,10 +116,8 @@ class Rektangel(Geometrisk_form):
         return (self.a * self.b)
 
     def inne_i(self, x: float, y: float) -> bool:
-        self._test_reelt(x)
-        self._test_reelt(y)
-        
-        return abs(self.x - x) <= self.a/2 and abs(self.y - y) <= self.b/2
+
+        return self._apa(self.a/2, x1=self.x, x2=x) and self._apa(self.b/2, y1=self.y, y2=y)
 
     def __eq__(self, other: "Rektangel") -> bool: 
         if not isinstance(other, Rektangel):
@@ -126,6 +140,8 @@ class Rektangel(Geometrisk_form):
 
     def __repr__(self) -> str: 
         return f"Rektanngel( x = {self.x}, y = {self.y}, a = {self.a}, b = {self.b})"
+
+
 
 
 class Cirkel(Geometrisk_form):
@@ -152,8 +168,10 @@ class Cirkel(Geometrisk_form):
         return tau * self.r**2 /2       
 
     def inne_i(self, x: float, y: float) -> bool:
-        avstånd_mitt = np.sqrt((self.x - x)**2 + (self.y - y)**2)
-        return avstånd_mitt <= self.r
+
+        return self._apa(self.r, x1=self.x, y1=self.y, x2=x, y2=y)
+        #avstånd_mitt = np.sqrt((self.x - x)**2 + (self.y - y)**2)
+        #return avstånd_mitt <= self.r
 
     def __eq__(self, other: "Cirkel") -> bool:
         if not isinstance(other, Cirkel):
