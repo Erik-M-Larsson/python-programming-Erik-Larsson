@@ -2,8 +2,8 @@ from math import tau, sqrt
 import lab3 as l
 import numpy as np
 
-form = l.Geometrisk_form(5, 4)
-form2 = l.Geometrisk_form(5, 4, 2)
+#form = l.Geometrisk_form(5, 4)
+#form2 = l.Geometrisk_form(5, 4, 2)
 #form.rita_ut()
 
 #form.flööö(3, 3 )
@@ -70,3 +70,25 @@ form2 = l.Geometrisk_form(5, 4, 2)
 #print(  k )
 
 
+s1 = l.Sfar(4,4,4,3)
+s2 = l.Sfar(1,1,1,3)
+s3 = l.Sfar(4,4,4,2)
+
+#print(s1)
+#print(s1.omkrets())
+#print(s1.area())
+#print(s1.volym())
+
+#print(s1.inne_i(4, 4, 3))   # True
+#print(s1.inne_i(1,1,1))     # False
+#print(s1.inne_i(5.5,4,4))   # True
+
+#print(s1 == 3)
+#print(s1 == s2) 
+#print(s1 == s3)
+
+#s1.flööö(5,5,5)
+#print(s1)
+
+#s1.flööö(5,5,5, True)
+#print(s1)

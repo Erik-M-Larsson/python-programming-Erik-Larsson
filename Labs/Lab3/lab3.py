@@ -1,7 +1,7 @@
 from matplotlib import axes
 import matplotlib.pyplot as plt
 import numpy as np
-from math import nan, tau, sqrt
+from math import tau, sqrt
 
 
 class XYplan: # TODO snyggt plan för flera geometriska filurer
@@ -69,7 +69,12 @@ class Geometrisk_form:
         return round(sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2), 10) <= round(max_distans, 10) # Risk för avrundningsfel med flyttal. Möjligen roblematiskt vid randen. Den punkt jag tittade på flev felet åt rätt håll.
         #https://docs.python.org/3/tutorial/floatingpoint.html
 
-    def flööö(self,x: float, y: float, z: float = 0, relativ = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
+    def omkrets(self) -> float:
+        """Beräknar omkretsen på ett cirkulärt objekt"""
+        print("\U0001F49A", '\u03C4')
+        return tau * self.r     
+
+    def flööö(self,x: float, y: float, z: float = 0, relativ: bool = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
         """Flööar på mittpunkten till ny angiven punkt.
         Med relativ = True flyttas mittpunkten x enheter i x-led och y enheter i y-led"""
         if relativ:
@@ -232,7 +237,7 @@ class Kub(Geometrisk_form):
         
 
     def area(self) -> float:
-        """Beräknar summan av sidornas areor"""
+        """Beräknar begränsningsarean"""
         return 6 * self.a**2
 
 
@@ -259,12 +264,55 @@ class Kub(Geometrisk_form):
         #return super().rita_ut()
 
     def __repr__(self) -> str:
-        return f"Kub( x = {self.x}, y = {self.y}, z = {self.z}, a = {self.a}"
+        return f"Kub(x = {self.x}, y = {self.y}, z = {self.z}, a = {self.a}"
 
 
 
 
    
 
-class Sfar:
-    pass
+class Sfar(Geometrisk_form):
+    """Klass för sfärer"""
+    
+    def __init__(self, x: float, y: float, z: float, r: float) -> None:
+        self.r = r
+        super().__init__(x, y, z)
+
+    @property
+    def r(self) -> float:
+        return self._r
+
+    @r.setter
+    def r(self, val: float) -> float:
+        self._test_reelt(val)
+        self._r = val
+
+
+    #def omkrets(self) -> float: # Använd super().omkrets
+    #    print("\U0001F49A", '\u03C4')
+    #    return tau * self.r     
+
+    def area(self) -> float:
+        """Beräknar mantelarean"""
+        return 2 * tau * self.r**2
+
+    def volym(self) -> float:
+        """Beräknar volymen"""
+        return 2/3 * tau * self.r**3
+
+    def inne_i(self, x: float, y: float, z: float) -> bool:
+
+        return self._avstand_mitt(self.r, self.x, self.y, self.z, x, y, z)
+                
+    def __eq__(self, other: "Sfar") -> bool:
+        if not isinstance(other, Sfar):
+            raise TypeError("Måste vara av klassen Sfar") 
+        return self.r == other.r
+    
+    def rita_ut(self) -> None:
+        pass
+        #return super().rita_ut()
+
+    def __repr__(self) -> str:
+        return f"Sfar(x = {self.x}, y = {self.y}, z = {self.z}, r = {self.r})"
+
