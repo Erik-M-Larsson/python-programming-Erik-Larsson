@@ -1,7 +1,7 @@
 from matplotlib import axes
 import matplotlib.pyplot as plt
 import numpy as np
-from math import tau, sqrt
+from math import nan, tau, sqrt
 
 
 class XYplan: # TODO snyggt plan för flera geometriska filurer
@@ -12,10 +12,16 @@ class XYplan: # TODO snyggt plan för flera geometriska filurer
 class Geometrisk_form:
     """Klass för geometriska former"""
 
-    def __init__(self, x: float, y: float) -> None:
+    def __init__(self, x: float, y: float, z: float = None) -> None: # https://www.educative.io/edpresso/what-is-the-none-keyword-in-python
         self.x = x # TODO Tillkalla flööö istället?
         self.y = y
-        self.rita_ut()
+        if z != None: # TODO behövs den här ifsatsen? z= 0 istället?
+            self.z = z
+            #print("yoo")
+        #else:
+            #print("tjoho")
+    
+        #self.rita_ut()
 
 
     @property
@@ -27,7 +33,6 @@ class Geometrisk_form:
         self._test_reelt(val)
         self._x = val
 
-
     @property
     def y(self) -> float:
         return self._y
@@ -37,13 +42,22 @@ class Geometrisk_form:
         self._test_reelt(val)
         self._y = val
 
+    @property
+    def z(self) -> float:
+        return self._z
+
+    @z.setter
+    def z(self, val: float) -> None:
+        self._test_reelt(val)
+        self._z = val
+
     @staticmethod
     def _test_reelt(val: any) -> None:
         if not isinstance(val, (float, int)):
             raise(TypeError("Angivet värde är inte ett reellt tal")) # TODO hitta på bättre meddelande
 
     @staticmethod
-    def _apa(max_distans:  float, x1: float=0, y1:  float=0, z1: float=0, x2: float=0, y2: float=0, z2: float=0 ) -> bool: # TODO namnge metoden
+    def _avstand_mitt(max_distans:  float, x1: float=0, y1:  float=0, z1: float=0, x2: float=0, y2: float=0, z2: float=0 ) -> bool: # TODO namnge metoden
         """Kontrollerar euklidiskt avstånd mellan två punkter och jämför om det är <= max_distans"""
         
         # Kontroll datatyp 
@@ -52,9 +66,10 @@ class Geometrisk_form:
             Geometrisk_form._test_reelt(t)
 
         # Beräkna avstånd och jämför med angivet maxvärde
-        return round(sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2), 10) <= max_distans # Risk för avrundningstal med flyttal vid randen
+        return round(sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2), 10) <= round(max_distans, 10) # Risk för avrundningsfel med flyttal. Möjligen roblematiskt vid randen. Den punkt jag tittade på flev felet åt rätt håll.
+        #https://docs.python.org/3/tutorial/floatingpoint.html
 
-    def flööö(self,x, y, relativ = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
+    def flööö(self,x: float, y: float, z: float = 0, relativ = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
         """Flööar på mittpunkten till ny angiven punkt.
         Med relativ = True flyttas mittpunkten x enheter i x-led och y enheter i y-led"""
         if relativ:
@@ -62,9 +77,11 @@ class Geometrisk_form:
             #self._test_reelt(y)
             self.x += x 
             self.y += y
+            self.z += z # TODO hantera om z= None
         else:
             self.x = x
             self.y = y
+            self.z = z
         
         self.rita_ut()
 
@@ -117,7 +134,7 @@ class Rektangel(Geometrisk_form):
 
     def inne_i(self, x: float, y: float) -> bool:
 
-        return self._apa(self.a/2, x1=self.x, x2=x) and self._apa(self.b/2, y1=self.y, y2=y)
+        return self._avstand_mitt(self.a/2, x1=self.x, x2=x) and self._avstand_mitt(self.b/2, y1=self.y, y2=y)
 
     def __eq__(self, other: "Rektangel") -> bool: 
         if not isinstance(other, Rektangel):
@@ -169,7 +186,7 @@ class Cirkel(Geometrisk_form):
 
     def inne_i(self, x: float, y: float) -> bool:
 
-        return self._apa(self.r, x1=self.x, y1=self.y, x2=x, y2=y)
+        return self._avstand_mitt(self.r, x1=self.x, y1=self.y, x2=x, y2=y)
         #avstånd_mitt = np.sqrt((self.x - x)**2 + (self.y - y)**2)
         #return avstånd_mitt <= self.r
 
@@ -189,8 +206,65 @@ class Cirkel(Geometrisk_form):
         return f"Cirkel( x = {self.x}, y = {self.y}, r = {self.r})"
 
 
-class Kub:
-    pass
+
+
+class Kub(Geometrisk_form):
+    """Klass för kuber"""
+
+    def __init__(self, x: float, y: float, z: float, a: float) -> None:
+        self.a = a
+        super().__init__(x, y, z)
+
+
+    @property
+    def a(self) -> float:
+        return self._a
+
+    @a.setter
+    def a(self, val: float) -> None:   
+        self._test_reelt(val)
+        self._a = val
+
+
+    def omkrets(self) -> float:
+        """Beräknar summan av längden på kanterna"""
+        return 12 * self.a 
+        
+
+    def area(self) -> float:
+        """Beräknar summan av sidornas areor"""
+        return 6 * self.a**2
+
+
+    def volym(self) -> float:
+        """Beräknar volymen"""
+        return self.a**3    
+
+
+    def inne_i(self, x: float, y: float, z: float) -> bool:
+
+        return (self._avstand_mitt(self.a/2, x1=self.x, x2=x) and
+                self._avstand_mitt(self.a/2, y1=self.y, y2=y) and
+                self._avstand_mitt(self.a/2, z1=self.z, z2=z) )
+    
+
+    def __eq__(self, other: "Kub") -> bool:
+        if not isinstance(other, Kub):
+            raise TypeError("Måste vara av klassen Kub") 
+        return self.a == other.a
+
+    
+    def rita_ut(self) -> None:
+        pass
+        #return super().rita_ut()
+
+    def __repr__(self) -> str:
+        return f"Kub( x = {self.x}, y = {self.y}, z = {self.z}, a = {self.a}"
+
+
+
+
+   
 
 class Sfar:
     pass
