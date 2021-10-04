@@ -4,9 +4,10 @@ import numpy as np
 from math import tau, sqrt
 
 
+# Det här behövs ju inte ååååååå
 class XYplan: # TODO snyggt plan för flera geometriska filurer
     pass
-
+ 
 
 
 class Geometrisk_form:
@@ -120,6 +121,7 @@ class Rektangel(Geometrisk_form):
     @a.setter
     def a(self, val: float) -> None:
         self._test_reelt(val)
+        # TODO koll negativ
         self._a = val
 
     @property
@@ -129,6 +131,7 @@ class Rektangel(Geometrisk_form):
     @b.setter
     def b(self, val: float) -> None:
         self._test_reelt(val) 
+        # TODO koll negativ
         self._b = val
 
     def omkrets(self) -> float:
@@ -180,6 +183,7 @@ class Cirkel(Geometrisk_form):
     @r.setter
     def r(self, val: float) -> None:
         self._test_reelt(val)
+        # TODO koll negativ
         self._r = val
 
     def omkrets(self) -> float:
@@ -228,6 +232,7 @@ class Kub(Geometrisk_form):
     @a.setter
     def a(self, val: float) -> None:   
         self._test_reelt(val)
+        # TODO koll negativ
         self._a = val
 
 
@@ -269,8 +274,6 @@ class Kub(Geometrisk_form):
 
 
 
-   
-
 class Sfar(Geometrisk_form):
     """Klass för sfärer"""
     
@@ -285,6 +288,7 @@ class Sfar(Geometrisk_form):
     @r.setter
     def r(self, val: float) -> float:
         self._test_reelt(val)
+        # TODO koll negativ
         self._r = val
 
 

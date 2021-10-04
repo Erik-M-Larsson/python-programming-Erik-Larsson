@@ -70,9 +70,9 @@ import numpy as np
 #print(  k )
 
 
-s1 = l.Sfar(4,4,4,3)
-s2 = l.Sfar(1,1,1,3)
-s3 = l.Sfar(4,4,4,2)
+#s1 = l.Sfar(4,4,4,3)
+#s2 = l.Sfar(1,1,1,3)
+#s3 = l.Sfar(4,4,4,2)
 
 #print(s1)
 #print(s1.omkrets())
@@ -92,3 +92,4 @@ s3 = l.Sfar(4,4,4,2)
 
 #s1.flööö(5,5,5, True)
 #print(s1)
+
