@@ -15,8 +15,6 @@ class GeometriskForm:
         self.z = z
 
 
-
-
     @property
     def x(self) -> float:
         return self._x
@@ -97,7 +95,7 @@ class GeometriskForm:
 
     
     def __repr__(self) -> str: 
-        return f"GeometriskForm( x = {self.x}, y = {self.y}, z = {self.z})"
+        return f"GeometriskForm( x = {self.x}, y = {self.y}, z = {self.z} )"
 
 
 
@@ -147,7 +145,7 @@ class Rektangel(GeometriskForm):
         return (self.a == other.a and self.b == other.b) or (self.a == other.b and self.b == other.a)
 
     def __repr__(self) -> str: 
-        return f"Rektangel( x = {self.x}, y = {self.y}, a = {self.a}, b = {self.b})"
+        return f"Rektangel( x = {self.x}, y = {self.y}, a = {self.a}, b = {self.b} )"
 
 
 
@@ -188,7 +186,7 @@ class Cirkel(GeometriskForm):
         return self.r == other.r
 
     def __repr__(self) -> str:
-        return f"Cirkel( x = {self.x}, y = {self.y}, r = {self.r})"
+        return f"Cirkel( x = {self.x}, y = {self.y}, r = {self.r} )"
 
 
 
@@ -241,7 +239,7 @@ class Kub(GeometriskForm):
 
 
     def __repr__(self) -> str:
-        return f"Kub(x = {self.x}, y = {self.y}, z = {self.z}, a = {self.a}"
+        return f"Kub( x = {self.x}, y = {self.y}, z = {self.z}, a = {self.a} )"
 
 
 
@@ -262,7 +260,7 @@ class Sfar(GeometriskForm):
     @r.setter
     def r(self, val: float) -> float:
         self._test_reelt(val)
-        # TODO koll negativ
+        self._test_inte_negativt(val)
         self._r = val
 
 
@@ -292,5 +290,5 @@ class Sfar(GeometriskForm):
 
 
     def __repr__(self) -> str:
-        return f"Sfar(x = {self.x}, y = {self.y}, z = {self.z}, r = {self.r})"
+        return f"Sfar( x = {self.x}, y = {self.y}, z = {self.z}, r = {self.r} )"
 

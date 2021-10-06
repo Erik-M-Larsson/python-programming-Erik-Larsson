@@ -124,7 +124,7 @@ class TestGeometriskForm(unittest.TestCase):
     # 22
     def test_repr(self):                     
         f = self.geo_form_2D
-        self.assertEqual(f.__repr__(), "GeometriskForm( x = -1, y = 2, z = None)" ) 
+        self.assertEqual(f.__repr__(), "GeometriskForm( x = -1, y = 2, z = None )" ) 
 
 
 
@@ -157,12 +157,12 @@ class TestRektangel(unittest.TestCase):
         
     # Geometriska metoder
     # 27
-    def testa_omkrets(self):
+    def test_omkrets(self):
         o  = self.rektangel.omkrets()
         self.assertEqual(o, 12.4)
 
     # 28
-    def testa_area(self):
+    def test_area(self):
         a = self.rektangel.area()
         self.assertEqual(a, 8.4)    
 
@@ -220,7 +220,7 @@ class TestRektangel(unittest.TestCase):
     # 38
     def test_repr(self):                     
         re = self.rektangel
-        self.assertEqual(re.__repr__(), "Rektangel( x = -1, y = 0, a = 4.2, b = 2)" ) 
+        self.assertEqual(re.__repr__(), "Rektangel( x = -1, y = 0, a = 4.2, b = 2 )" ) 
 
 
 
@@ -254,12 +254,12 @@ class TestCirkel(unittest.TestCase):
       
     # Geometriska metoder
     # 43
-    def testa_omkrets(self):
+    def test_omkrets(self):
         o  = self.enhetscirkel.omkrets()
         self.assertEqual(o, tau)
 
     # 44
-    def testa_area(self):
+    def test_area(self):
         a = self.enhetscirkel.area()
         self.assertEqual(a, tau/2)    
 
@@ -307,18 +307,208 @@ class TestCirkel(unittest.TestCase):
     # 52
     def test_repr(self):                     
         c = self.enhetscirkel
-        self.assertEqual(c.__repr__(), "Cirkel( x = 0, y = 0, r = 1)" ) 
+        self.assertEqual(c.__repr__(), "Cirkel( x = 0, y = 0, r = 1 )" ) 
  
 
 
 
-
-
-
-
-
 class TestKub(unittest.TestCase):
-    pass
+    def setUp(self) -> None:
+        self.kub = l.Kub(-1, 0, 1, 2)
+
+    # Test skapa objekt
+    # 53
+    def test_skapa_kub(self) -> None:
+        k = self.kub
+        self.assertEqual((k.x, k.y, k.z, k.a) , (-1, 0, 1, 2))
+
+    # 54
+    def test_skapa_kub_indata_val(self):
+        with self.assertRaises(TypeError):
+            l.Rektangel(1,'2', 3, 4)
+   
+    # 55
+    def test_skapa_kub_neg_sida(self):  
+        with self.assertRaises(ValueError):
+            l.Kub(1, 2, 3, -4)
+
+    # 56
+    def test_skapa_tom_kub(self):
+        with self.assertRaises(TypeError):
+            l.Kub()
+      
+    # Geometriska metoder
+    # 57
+    def test_omkrets(self):
+        o  = self.kub.omkrets()
+        self.assertEqual(o, 24)
+
+    # 58
+    def test_area(self):
+        a = self.kub.area()
+        self.assertEqual(a, 24)    
+ 
+    # 59
+    def test_volym(self):
+        v = self.kub.volym()
+        self.assertEqual(v, 8) 
+
+    # Testa inne_i()
+    # 60
+    def test_punkt_inne_i(self):
+        k = self.kub
+        self.assertTrue(k.inne_i(-0.5, 0.5, 0.5))    
+
+    # 61
+    def test_punkt_inne_i2(self):
+        k = self.kub
+        self.assertTrue(k.inne_i(-0.1, 0.9, 1.9))   
+
+    # 62
+    def test_punkt_horn(self):
+        k = self.kub
+        self.assertTrue(k.inne_i(0, 1, 2))   
+
+    # 63  
+    def test_punkt_utanfor_x (self):
+        k = self.kub
+        self.assertFalse(k.inne_i(1, 0, 1))   
+
+    # 64 
+    def test_punkt_utanfor_y (self):
+        k = self.kub
+        self.assertFalse(k.inne_i(-1, -2, 1)) 
+
+    # 65 
+    def test_punkt_utanfor_z (self):
+        k = self.kub
+        self.assertFalse(k.inne_i(-1, -0, 3)) 
+
+    # Test av __eq__
+    # 66
+    def test_lika(self):
+        k1 = l.Kub(0, 0, 0, 3)
+        k2 = l.Kub(1, 1, 2, 3)
+        self.assertTrue(k1 == k2)
+ 
+    # 67
+    def test_olika(self):
+        k1 = l.Kub(0, 0, 2, 3)
+        k2 = l.Kub(0, 0, 2, 1)
+        self.assertFalse(k1 == k2)
+    
+    # 68
+    def test_lika_not_Kub(self):
+        with self.assertRaises(TypeError):
+            k1 = l.Kub(0, 1, 2, 2)
+            k1 == 2
+
+    # 69
+    def test_repr(self):                     
+        k = self.kub
+        self.assertEqual(k.__repr__(), "Kub( x = -1, y = 0, z = 1, a = 2 )" ) 
+
+
+
+
+class TestSfar(unittest.TestCase):
+    def setUp(self) -> None:
+        self.enhetssfar = l.Sfar(0, 0, 0, 1)
+
+    # Test skapa objekt
+    # 70
+    def test_skapa_sfar(self) -> None:
+        s = self.enhetssfar
+        self.assertEqual((s.x, s.y, s.z, s.r) , (0, 0, 0, 1))
+
+    # 71
+    def test_skapa_sfar_indata_val(self):
+        with self.assertRaises(TypeError):
+            l.Sfar(1,'2', 3, 4)
+   
+    # 72
+    def test_skapa_sfar_neg_radie(self):  
+        with self.assertRaises(ValueError):
+            l.Sfar(1, 2, 3, -4)
+
+    # 73
+    def test_skapa_tom_sfar(self):
+        with self.assertRaises(TypeError):
+            l.Sfar()
+      
+    # Geometriska metoder
+    # 74
+    def test_omkrets(self):
+        o  = self.enhetssfar.omkrets()
+        self.assertEqual(o, tau)
+
+    # 75
+    def test_area(self):
+        a = self.enhetssfar.area()
+        self.assertEqual(a, 2*tau)    
+
+    # 76   
+    def test_volym(self):
+        v = self.enhetssfar.volym()
+        self.assertEqual(v, 2*tau/3)
+ 
+   # Testa inne_i()
+    # 77
+    def test_punkt_inne_i(self):
+        s = self.enhetssfar
+        self.assertTrue(s.inne_i(-0.5, 0.5, 0.5))     
+
+    # 78
+    def test_punkt_yta(self):
+        s = self.enhetssfar
+        yz = 1/sqrt(2)
+        self.assertTrue(s.inne_i(0, yz, yz))   
+
+    # 79  
+    def test_punkt_utanfor_x (self):
+        s = self.enhetssfar
+        self.assertFalse(s.inne_i(1.1, 0, 0))   
+
+    # 80 
+    def test_punkt_utanfor_y (self):
+        s = self.enhetssfar
+        self.assertFalse(s.inne_i(0, -2, 0)) 
+
+    # 81 
+    def test_punkt_utanfor_z (self):
+        s = self.enhetssfar
+        self.assertFalse(s.inne_i(0, 0, 2)) 
+    
+    # 82 
+    def test_punkt_utanfor_xyz (self):
+        s = self.enhetssfar
+        xyz = 1/sqrt(2)
+        self.assertFalse(s.inne_i(xyz , xyz, xyz)) 
+ 
+    # Test av __eq__
+    # 83
+    def test_lika(self):
+        s1 = l.Sfar(0, 0, 0, 3)
+        s2 = l.Sfar(1, 1, 2, 3)
+        self.assertTrue(s1 == s2)
+ 
+    # 84
+    def test_olika(self):
+        s1 = l.Sfar(0, 0, 2, 3)
+        s2 = l.Sfar(0, 0, 2, 1)
+        self.assertFalse(s1 == s2)
+  
+    # 85
+    def test_lika_not_Sfar(self):
+        with self.assertRaises(TypeError):
+            s1 = l.Sfar(0, 1, 2, 2)
+            s1 == 2
+
+    # 86
+    def test_repr(self):                     
+        s = self.enhetssfar
+        self.assertEqual(s.__repr__(), "Sfar( x = 0, y = 0, z = 0, r = 1 )" ) 
+
 
 
 
