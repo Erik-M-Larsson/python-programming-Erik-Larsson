@@ -4,11 +4,14 @@ import numpy as np
 
 #form = l.Geometrisk_form(5, 4)
 #form2 = l.Geometrisk_form(5, 4, 2)
-#form.rita_ut()
-
+#form3 = l.Geometrisk_form(5, 'f*')
+#form4 = l.GeometriskForm(-1, 2)
 #form.flööö(3, 3 )
 
 #form.flööö(0, -6, True )
+#print(form4)
+#form4.flööö(6, -7, relativ=True)
+#print(form4)
 
 
 #cirkel1 = l.Cirkel(5, 4, 4)
@@ -93,3 +96,4 @@ import numpy as np
 #s1.flööö(5,5,5, True)
 #print(s1)
 
+print(tau)

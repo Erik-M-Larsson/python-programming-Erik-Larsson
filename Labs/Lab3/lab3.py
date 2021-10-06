@@ -1,15 +1,20 @@
 #import numpy as np
 from math import tau, sqrt
 
+
+# TODO Kommentarer
+# TODO Kolla Docstrings
+# TODO Kolla type hint
  
-class Geometrisk_form:
+class GeometriskForm:
     """Klass för geometriska former"""
 
     def __init__(self, x: float, y: float, z: float = None) -> None: # https://www.educative.io/edpresso/what-is-the-none-keyword-in-python
-        self.x = x # TODO Tillkalla flööö istället?
+        self.x = x
         self.y = y
-        if z != None: # TODO behövs den här ifsatsen? z= 0 istället?
-            self.z = z
+        self.z = z
+
+
 
 
     @property
@@ -36,54 +41,69 @@ class Geometrisk_form:
 
     @z.setter
     def z(self, val: float) -> None:
-        self._test_reelt(val)
+        if val != None:
+            self._test_reelt(val)
         self._z = val
 
     @staticmethod
     def _test_reelt(val: any) -> None:
         if not isinstance(val, (float, int)):
-            raise(TypeError("Angivet värde är inte ett reellt tal")) # TODO hitta på bättre meddelande
+            raise TypeError(f"Angivet värde är inte ett reellt tal: {val}")
 
     @staticmethod
-    def _avstand_mitt(max_distans:  float, x1: float=0, y1:  float=0, z1: float=0, x2: float=0, y2: float=0, z2: float=0 ) -> bool: # TODO namnge metoden
-        """Kontrollerar euklidiskt avstånd mellan två punkter och jämför om det är <= max_distans"""
+    def _test_inte_negativt(val: float) -> None:
+        if val < 0:
+            raise ValueError(f"Angivet värde kan inte var negativt: {val}")        
+
+    @staticmethod
+    def _avstand_mitt(max_avstand:  float, x1: float=0, y1:  float=0, z1: float=0, x2: float=0, y2: float=0, z2: float=0 ) -> bool: # TODO namnge metoden
+        """Kontrollerar euklidiskt avstånd från en punkt till mittpunkten och jämför om det är <= största tillåtna avståndet"""
         
         # Kontroll datatyp 
-        tester = (max_distans, x1, y1, z1, x2, y2, z1, z2)
+        tester = (max_avstand, x1, y1, z1, x2, y2, z1, z2)
         for t in tester:
-            Geometrisk_form._test_reelt(t)
+            GeometriskForm._test_reelt(t)
+
+        # Kontroll max_avstand ej negativt
+        GeometriskForm._test_inte_negativt(max_avstand) 
 
         # Beräkna avstånd och jämför med angivet maxvärde
-        return round(sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2), 10) <= round(max_distans, 10) # Risk för avrundningsfel med flyttal. Möjligen roblematiskt vid randen. Den punkt jag tittade på flev felet åt rätt håll.
+        return round(sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2), 10) <= round(max_avstand, 10) # Risk för avrundningsfel med flyttal. Möjligen roblematiskt vid randen. Den punkt jag tittade på flev felet åt rätt håll.
         #https://docs.python.org/3/tutorial/floatingpoint.html
 
-    def omkrets(self) -> float: # TODO den är inte generell? Flytta
+    def omkrets(self) -> float:             # TODO den är inte generell? Flytta
         """Beräknar omkretsen på ett cirkulärt objekt"""
         print("\U0001F49A", '\u03C4')
         return tau * self.r     
 
-    def flööö(self,x: float, y: float, z: float = 0, relativ: bool = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
+    def flööö(self,x: float, y: float, z: float = None, relativ: bool = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
         """Flööar på mittpunkten till ny angiven punkt.
         Med relativ = True flyttas mittpunkten x enheter i x-led och y enheter i y-led"""
+        if (self.z == None) != (z == None): # Varför finns inte xor?
+            raise TypeError("Antalet dimensioner matchar inte objektets dimensioner")       
+        
         if relativ:
-            #self._test_reelt(x)
-            #self._test_reelt(y)
+            self._test_reelt(x)
+            self._test_reelt(y)
             self.x += x 
             self.y += y
-            self.z += z # TODO hantera om z= None
+            if z != None:              
+                self._test_reelt(z)
+                self.z += z 
         else:
             self.x = x
             self.y = y
             self.z = z
 
     
-    def __repr__(self) -> str: # TODO skriv nått i denna
-        return "hej"
+    def __repr__(self) -> str: 
+        return f"GeometriskForm( x = {self.x}, y = {self.y}, z = {self.z})"
 
 
 
 
-class Rektangel(Geometrisk_form):
+
+class Rektangel(GeometriskForm):
     """Klass för rektanglar"""
 
     def __init__(self, x: float, y: float, a: float, b: float) -> None:
@@ -98,7 +118,7 @@ class Rektangel(Geometrisk_form):
     @a.setter
     def a(self, val: float) -> None:
         self._test_reelt(val)
-        # TODO koll negativ
+        self._test_inte_negativt(val)
         self._a = val
 
     @property
@@ -108,7 +128,7 @@ class Rektangel(Geometrisk_form):
     @b.setter
     def b(self, val: float) -> None:
         self._test_reelt(val) 
-        # TODO koll negativ
+        self._test_inte_negativt(val)
         self._b = val
 
     def omkrets(self) -> float:
@@ -127,12 +147,12 @@ class Rektangel(Geometrisk_form):
         return (self.a == other.a and self.b == other.b) or (self.a == other.b and self.b == other.a)
 
     def __repr__(self) -> str: 
-        return f"Rektanngel( x = {self.x}, y = {self.y}, a = {self.a}, b = {self.b})"
+        return f"Rektangel( x = {self.x}, y = {self.y}, a = {self.a}, b = {self.b})"
 
 
 
 
-class Cirkel(Geometrisk_form):
+class Cirkel(GeometriskForm):
     "Klass för cirklar"
 
     def __init__(self, x: float, y: float, r :float) -> None:
@@ -146,7 +166,7 @@ class Cirkel(Geometrisk_form):
     @r.setter
     def r(self, val: float) -> None:
         self._test_reelt(val)
-        # TODO koll negativ
+        self._test_inte_negativt(val)
         self._r = val
 
     def omkrets(self) -> float:
@@ -173,7 +193,7 @@ class Cirkel(Geometrisk_form):
 
 
 
-class Kub(Geometrisk_form):
+class Kub(GeometriskForm):
     """Klass för kuber"""
 
     def __init__(self, x: float, y: float, z: float, a: float) -> None:
@@ -188,7 +208,7 @@ class Kub(Geometrisk_form):
     @a.setter
     def a(self, val: float) -> None:   
         self._test_reelt(val)
-        # TODO koll negativ
+        self._test_inte_negativt(val)
         self._a = val
 
 
@@ -226,7 +246,7 @@ class Kub(Geometrisk_form):
 
 
 
-class Sfar(Geometrisk_form):
+class Sfar(GeometriskForm):
     """Klass för sfärer"""
     
     def __init__(self, x: float, y: float, z: float, r: float) -> None:
