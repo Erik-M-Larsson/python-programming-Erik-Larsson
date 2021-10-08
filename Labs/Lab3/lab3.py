@@ -1,7 +1,8 @@
 #import numpy as np
+
 from math import tau, sqrt
 
-
+ 
 # TODO Kommentarer
 # TODO Kolla Docstrings
 # TODO Kolla type hint
@@ -21,7 +22,7 @@ class GeometriskForm:
 
     @x.setter
     def x(self,val):
-        self._test_reelt(val)
+        self._kontroll_typ(val)
         self._x = val
 
     @property
@@ -30,7 +31,7 @@ class GeometriskForm:
         
     @y.setter
     def y(self,val):
-        self._test_reelt(val)
+        self._kontroll_typ(val)
         self._y = val
 
     @property
@@ -40,16 +41,19 @@ class GeometriskForm:
     @z.setter
     def z(self, val: float) -> None:
         if val != None:
-            self._test_reelt(val)
+            self._kontroll_typ(val)
         self._z = val
 
     @staticmethod
-    def _test_reelt(val: any) -> None:
+    def _kontroll_typ(val: any) -> None:
+        """Kontrollerar att angivet värde är av typ float eller int"""
         if not isinstance(val, (float, int)):
             raise TypeError(f"Angivet värde är inte ett reellt tal: {val}")
 
     @staticmethod
-    def _test_inte_negativt(val: float) -> None:
+    def _kontroll_inte_negativt(val: float) -> None:
+        """Kontrollerar att talet inte är negativt"""
+        GeometriskForm._kontroll_typ(val)
         if val < 0:
             raise ValueError(f"Angivet värde kan inte var negativt: {val}")        
 
@@ -60,33 +64,28 @@ class GeometriskForm:
         # Kontroll datatyp 
         tester = (max_avstand, x1, y1, z1, x2, y2, z1, z2)
         for t in tester:
-            GeometriskForm._test_reelt(t)
+            GeometriskForm._kontroll_typ(t)
 
         # Kontroll max_avstand ej negativt
-        GeometriskForm._test_inte_negativt(max_avstand) 
+        GeometriskForm._kontroll_inte_negativt(max_avstand) 
 
         # Beräkna avstånd och jämför med angivet maxvärde
         return round(sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2), 10) <= round(max_avstand, 10) # Risk för avrundningsfel med flyttal. Möjligen roblematiskt vid randen. Den punkt jag tittade på flev felet åt rätt håll.
-        #https://docs.python.org/3/tutorial/floatingpoint.html
+        #https://docs.python.org/3/tutorial/floatingpoint.html 
 
-    def omkrets(self) -> float:             # TODO den är inte generell? Flytta
-        """Beräknar omkretsen på ett cirkulärt objekt"""
-        print("\U0001F49A", '\u03C4')
-        return tau * self.r     
-
-    def flööö(self,x: float, y: float, z: float = None, relativ: bool = False) -> None:          # TODO Hitta något tråkigt seriöst namn         
-        """Flööar på mittpunkten till ny angiven punkt.
+    def flytta(self,x: float, y: float, z: float = None, relativ: bool = False) -> None:          
+        """Fllyttar mittpunkten till ny angiven punkt.
         Med relativ = True flyttas mittpunkten x enheter i x-led och y enheter i y-led"""
         if (self.z == None) != (z == None): # Varför finns inte xor?
             raise TypeError("Antalet dimensioner matchar inte objektets dimensioner")       
         
         if relativ:
-            self._test_reelt(x)
-            self._test_reelt(y)
+            self._kontroll_typ(x)
+            self._kontroll_typ(y)
             self.x += x 
             self.y += y
             if z != None:              
-                self._test_reelt(z)
+                self._kontroll_typ(z)
                 self.z += z 
         else:
             self.x = x
@@ -115,8 +114,7 @@ class Rektangel(GeometriskForm):
         
     @a.setter
     def a(self, val: float) -> None:
-        self._test_reelt(val)
-        self._test_inte_negativt(val)
+        self._kontroll_inte_negativt(val)
         self._a = val
 
     @property
@@ -125,8 +123,7 @@ class Rektangel(GeometriskForm):
 
     @b.setter
     def b(self, val: float) -> None:
-        self._test_reelt(val) 
-        self._test_inte_negativt(val)
+        self._kontroll_inte_negativt(val)
         self._b = val
 
     def omkrets(self) -> float:
@@ -163,11 +160,10 @@ class Cirkel(GeometriskForm):
 
     @r.setter
     def r(self, val: float) -> None:
-        self._test_reelt(val)
-        self._test_inte_negativt(val)
+        self._kontroll_inte_negativt(val)
         self._r = val
 
-    def omkrets(self) -> float:
+    def omkrets(self) -> float: # Mår lite dåligt för att det är samma formel i sfären. Hade jag tid kunde jag gjort en egen klass för GeometriskaBeräkningar och använda konstitution. Varför kom jag inte på det med en gång.
         print("\U0001F49A", '\u03C4')
         return tau * self.r     
     
@@ -205,12 +201,11 @@ class Kub(GeometriskForm):
 
     @a.setter
     def a(self, val: float) -> None:   
-        self._test_reelt(val)
-        self._test_inte_negativt(val)
+        self._kontroll_inte_negativt(val)
         self._a = val
 
 
-    def omkrets(self) -> float:
+    def langd_kanter(self) -> float:
         """Beräknar summan av längden på kanterna"""
         return 12 * self.a 
         
@@ -259,14 +254,13 @@ class Sfar(GeometriskForm):
 
     @r.setter
     def r(self, val: float) -> float:
-        self._test_reelt(val)
-        self._test_inte_negativt(val)
+        self._kontroll_inte_negativt(val)
         self._r = val
 
 
-    #def omkrets(self) -> float: # Använd super().omkrets
-    #    print("\U0001F49A", '\u03C4')
-    #    return tau * self.r     
+    def omkrets(self) -> float: 
+        print("\U0001F49A", '\u03C4')
+        return tau * self.r     
 
     def area(self) -> float:
         """Beräknar mantelarean"""

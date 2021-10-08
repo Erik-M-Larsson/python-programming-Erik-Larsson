@@ -11,25 +11,28 @@ class TestGeometriskForm(unittest.TestCase):
     # Testa metoder för felhantering i indata
     # 1
     def test_ange_float(self):
-        l.GeometriskForm._test_reelt(tau)
+        f = l.GeometriskForm._kontroll_typ(tau)
+        self.assertEqual(f, None)
 
     # 2
     def test_ange_int(self):
-        l.GeometriskForm._test_reelt(-1)
+        f = l.GeometriskForm._kontroll_typ(-1)
+        self.assertEqual(f, None)
 
     # 3 
     def test_ange_felaktig_typ(self):
         with self.assertRaises(TypeError):
-            l.GeometriskForm._test_reelt("pi")    
+            l.GeometriskForm._kontroll_typ("pi")    
 
     # 4
     def test_negativt_tal(self):
         with self.assertRaises(ValueError):
-            l.GeometriskForm._test_inte_negativt(-1)
+            l.GeometriskForm._kontroll_inte_negativt(-1)
 
     # 5
     def test_noll_negativt(self): # TODO är detta rätt sätt?
-        l.GeometriskForm._test_inte_negativt(0)
+        f = l.GeometriskForm._kontroll_inte_negativt(0)
+        self.assertEqual(f, None)
         
           
     # Test skapa objekt
@@ -62,38 +65,38 @@ class TestGeometriskForm(unittest.TestCase):
     # 11
     def test_flytta_abs_2D(self):
         f = self.geo_form_2D
-        f.flööö(6, -7)
+        f.flytta(6, -7)
         self.assertEqual((f.x, f.y, f.z), (6, -7, None))
 
     # 12
     def test_flytta_abs_3D(self):
         f = self.geo_form_3D
-        f.flööö(6, -7, 8)
+        f.flytta(6, -7, 8)
         self.assertEqual((f.x, f.y, f.z), (6, -7, 8))
 
     # 13
     def test_flytta_rel_2D(self):
         f = self.geo_form_2D
-        f.flööö(6, -7, relativ=True)
+        f.flytta(6, -7, relativ=True)
         self.assertEqual((f.x, f.y, f.z), (5, -5, None))
 
     # 14
     def test_flytta_rel_3D(self):
         f = self.geo_form_3D
-        f.flööö(6, -7, 8, relativ=True)
+        f.flytta(6, -7, 8, relativ=True)
         self.assertEqual((f.x, f.y, f.z), (5, -5, 11))
 
     # 15 
     def test_flytta_2D_i_3D(self): 
         with self.assertRaises(TypeError):
             f = self.geo_form_2D
-            f.flööö(6, -7, 8)
+            f.flytta(6, -7, 8)
 
     # 16
     def test_flytta_3D_i_2D(self):
         with self.assertRaises(TypeError):
             f = self.geo_form_3D
-            f.flööö(6, -7)
+            f.flytta(6, -7)
 
     # Test _avstand_mitt()
     # 17
@@ -325,7 +328,7 @@ class TestKub(unittest.TestCase):
     # 54
     def test_skapa_kub_indata_val(self):
         with self.assertRaises(TypeError):
-            l.Rektangel(1,'2', 3, 4)
+            l.Kub(1,'2', 3, 4)
    
     # 55
     def test_skapa_kub_neg_sida(self):  
@@ -340,7 +343,7 @@ class TestKub(unittest.TestCase):
     # Geometriska metoder
     # 57
     def test_omkrets(self):
-        o  = self.kub.omkrets()
+        o  = self.kub.langd_kanter()
         self.assertEqual(o, 24)
 
     # 58
